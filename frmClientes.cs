@@ -19,12 +19,26 @@ namespace ProyectoFinal
 
         private void inicioToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            frmClientes clientes = new frmClientes();
+            clientes.MdiParent = this;
+            clientes.Show();
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            frmLogin login = new frmLogin();
+            login.Show();
+        }
+
+        private void salirToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

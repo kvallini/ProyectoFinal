@@ -35,6 +35,9 @@
             this.cerrarSesionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.catalogoDeVehiculosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.serviciosAdicionalesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.verMisCitasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colaboradoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.administradorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.facturacionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,14 +47,12 @@
             this.manualDelSistemaClientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manualDelSIstemaColaboradoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acercaDeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.catalogoDeVehiculosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.serviciosAdicionalesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.verMisCitasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.picAutosBanner = new System.Windows.Forms.PictureBox();
             this.grpOpcionesCliente = new System.Windows.Forms.GroupBox();
-            this.btnCatalogo = new System.Windows.Forms.Button();
-            this.btnServiciosAdicionales = new System.Windows.Forms.Button();
             this.btnMisCitas = new System.Windows.Forms.Button();
+            this.btnServiciosAdicionales = new System.Windows.Forms.Button();
+            this.btnCatalogo = new System.Windows.Forms.Button();
+            this.btnCerrarSesion = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picAutosBanner)).BeginInit();
@@ -61,7 +62,7 @@
             // picLogo
             // 
             this.picLogo.Image = ((System.Drawing.Image)(resources.GetObject("picLogo.Image")));
-            this.picLogo.Location = new System.Drawing.Point(75, 24);
+            this.picLogo.Location = new System.Drawing.Point(76, 19);
             this.picLogo.Name = "picLogo";
             this.picLogo.Size = new System.Drawing.Size(125, 75);
             this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -89,20 +90,22 @@
             this.cerrarSesionToolStripMenuItem,
             this.salirToolStripMenuItem});
             this.inicioToolStripMenuItem.Name = "inicioToolStripMenuItem";
-            this.inicioToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
-            this.inicioToolStripMenuItem.Text = "Inicio";
+            this.inicioToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
+            this.inicioToolStripMenuItem.Text = "Archivo";
             // 
             // cerrarSesionToolStripMenuItem
             // 
             this.cerrarSesionToolStripMenuItem.Name = "cerrarSesionToolStripMenuItem";
             this.cerrarSesionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.cerrarSesionToolStripMenuItem.Text = "Cerrar Sesion";
+            this.cerrarSesionToolStripMenuItem.Click += new System.EventHandler(this.cerrarSesionToolStripMenuItem_Click);
             // 
             // salirToolStripMenuItem
             // 
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
             this.salirToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.salirToolStripMenuItem.Text = "Salir";
+            this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
             // 
             // clientesToolStripMenuItem
             // 
@@ -113,6 +116,24 @@
             this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
             this.clientesToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.clientesToolStripMenuItem.Text = "Clientes";
+            // 
+            // catalogoDeVehiculosToolStripMenuItem
+            // 
+            this.catalogoDeVehiculosToolStripMenuItem.Name = "catalogoDeVehiculosToolStripMenuItem";
+            this.catalogoDeVehiculosToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.catalogoDeVehiculosToolStripMenuItem.Text = "Catalogo de Vehiculos";
+            // 
+            // serviciosAdicionalesToolStripMenuItem
+            // 
+            this.serviciosAdicionalesToolStripMenuItem.Name = "serviciosAdicionalesToolStripMenuItem";
+            this.serviciosAdicionalesToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.serviciosAdicionalesToolStripMenuItem.Text = "Servicios Adicionales";
+            // 
+            // verMisCitasToolStripMenuItem
+            // 
+            this.verMisCitasToolStripMenuItem.Name = "verMisCitasToolStripMenuItem";
+            this.verMisCitasToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.verMisCitasToolStripMenuItem.Text = "Ver mis Citas";
             // 
             // colaboradoresToolStripMenuItem
             // 
@@ -128,25 +149,25 @@
             // administradorToolStripMenuItem
             // 
             this.administradorToolStripMenuItem.Name = "administradorToolStripMenuItem";
-            this.administradorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.administradorToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.administradorToolStripMenuItem.Text = "Administrador";
             // 
             // facturacionToolStripMenuItem
             // 
             this.facturacionToolStripMenuItem.Name = "facturacionToolStripMenuItem";
-            this.facturacionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.facturacionToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.facturacionToolStripMenuItem.Text = "Facturacion";
             // 
             // agentesToolStripMenuItem
             // 
             this.agentesToolStripMenuItem.Name = "agentesToolStripMenuItem";
-            this.agentesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.agentesToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.agentesToolStripMenuItem.Text = "Agentes";
             // 
             // recepcionToolStripMenuItem
             // 
             this.recepcionToolStripMenuItem.Name = "recepcionToolStripMenuItem";
-            this.recepcionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.recepcionToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.recepcionToolStripMenuItem.Text = "Recepcion";
             // 
             // ayudaToolStripMenuItem
@@ -176,24 +197,6 @@
             this.acercaDeToolStripMenuItem.Size = new System.Drawing.Size(80, 20);
             this.acercaDeToolStripMenuItem.Text = "Acerca de...";
             // 
-            // catalogoDeVehiculosToolStripMenuItem
-            // 
-            this.catalogoDeVehiculosToolStripMenuItem.Name = "catalogoDeVehiculosToolStripMenuItem";
-            this.catalogoDeVehiculosToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.catalogoDeVehiculosToolStripMenuItem.Text = "Catalogo de Vehiculos";
-            // 
-            // serviciosAdicionalesToolStripMenuItem
-            // 
-            this.serviciosAdicionalesToolStripMenuItem.Name = "serviciosAdicionalesToolStripMenuItem";
-            this.serviciosAdicionalesToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.serviciosAdicionalesToolStripMenuItem.Text = "Servicios Adicionales";
-            // 
-            // verMisCitasToolStripMenuItem
-            // 
-            this.verMisCitasToolStripMenuItem.Name = "verMisCitasToolStripMenuItem";
-            this.verMisCitasToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.verMisCitasToolStripMenuItem.Text = "Ver mis Citas";
-            // 
             // picAutosBanner
             // 
             this.picAutosBanner.Image = ((System.Drawing.Image)(resources.GetObject("picAutosBanner.Image")));
@@ -206,6 +209,7 @@
             // 
             // grpOpcionesCliente
             // 
+            this.grpOpcionesCliente.Controls.Add(this.btnCerrarSesion);
             this.grpOpcionesCliente.Controls.Add(this.btnMisCitas);
             this.grpOpcionesCliente.Controls.Add(this.btnServiciosAdicionales);
             this.grpOpcionesCliente.Controls.Add(this.btnCatalogo);
@@ -216,18 +220,18 @@
             this.grpOpcionesCliente.TabIndex = 5;
             this.grpOpcionesCliente.TabStop = false;
             // 
-            // btnCatalogo
+            // btnMisCitas
             // 
-            this.btnCatalogo.BackColor = System.Drawing.SystemColors.Control;
-            this.btnCatalogo.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnCatalogo.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCatalogo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnCatalogo.Location = new System.Drawing.Point(11, 153);
-            this.btnCatalogo.Name = "btnCatalogo";
-            this.btnCatalogo.Size = new System.Drawing.Size(257, 53);
-            this.btnCatalogo.TabIndex = 0;
-            this.btnCatalogo.Text = "Catálogo de Vehículos";
-            this.btnCatalogo.UseVisualStyleBackColor = false;
+            this.btnMisCitas.BackColor = System.Drawing.SystemColors.Control;
+            this.btnMisCitas.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnMisCitas.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMisCitas.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnMisCitas.Location = new System.Drawing.Point(11, 269);
+            this.btnMisCitas.Name = "btnMisCitas";
+            this.btnMisCitas.Size = new System.Drawing.Size(257, 53);
+            this.btnMisCitas.TabIndex = 2;
+            this.btnMisCitas.Text = "Mis Citas";
+            this.btnMisCitas.UseVisualStyleBackColor = false;
             // 
             // btnServiciosAdicionales
             // 
@@ -235,32 +239,42 @@
             this.btnServiciosAdicionales.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnServiciosAdicionales.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnServiciosAdicionales.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnServiciosAdicionales.Location = new System.Drawing.Point(11, 238);
+            this.btnServiciosAdicionales.Location = new System.Drawing.Point(11, 192);
             this.btnServiciosAdicionales.Name = "btnServiciosAdicionales";
             this.btnServiciosAdicionales.Size = new System.Drawing.Size(257, 53);
             this.btnServiciosAdicionales.TabIndex = 1;
             this.btnServiciosAdicionales.Text = "Servicios Adicionales";
             this.btnServiciosAdicionales.UseVisualStyleBackColor = false;
             // 
-            // btnMisCitas
+            // btnCatalogo
             // 
-            this.btnMisCitas.BackColor = System.Drawing.SystemColors.Control;
-            this.btnMisCitas.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnMisCitas.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMisCitas.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnMisCitas.Location = new System.Drawing.Point(11, 321);
-            this.btnMisCitas.Name = "btnMisCitas";
-            this.btnMisCitas.Size = new System.Drawing.Size(257, 53);
-            this.btnMisCitas.TabIndex = 2;
-            this.btnMisCitas.Text = "Mis Citas";
-            this.btnMisCitas.UseVisualStyleBackColor = false;
+            this.btnCatalogo.BackColor = System.Drawing.SystemColors.Control;
+            this.btnCatalogo.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCatalogo.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCatalogo.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnCatalogo.Location = new System.Drawing.Point(11, 113);
+            this.btnCatalogo.Name = "btnCatalogo";
+            this.btnCatalogo.Size = new System.Drawing.Size(257, 53);
+            this.btnCatalogo.TabIndex = 0;
+            this.btnCatalogo.Text = "Catálogo de Vehículos";
+            this.btnCatalogo.UseVisualStyleBackColor = false;
+            // 
+            // btnCerrarSesion
+            // 
+            this.btnCerrarSesion.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCerrarSesion.Location = new System.Drawing.Point(76, 343);
+            this.btnCerrarSesion.Name = "btnCerrarSesion";
+            this.btnCerrarSesion.Size = new System.Drawing.Size(120, 53);
+            this.btnCerrarSesion.TabIndex = 3;
+            this.btnCerrarSesion.Text = "Cerrar Sesión";
+            this.btnCerrarSesion.UseVisualStyleBackColor = true;
             // 
             // frmClientes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.ClientSize = new System.Drawing.Size(858, 479);
+            this.ClientSize = new System.Drawing.Size(858, 483);
             this.ControlBox = false;
             this.Controls.Add(this.grpOpcionesCliente);
             this.Controls.Add(this.picAutosBanner);
@@ -304,6 +318,7 @@
         private System.Windows.Forms.Button btnMisCitas;
         private System.Windows.Forms.Button btnServiciosAdicionales;
         private System.Windows.Forms.Button btnCatalogo;
+        private System.Windows.Forms.Button btnCerrarSesion;
     }
 }
 

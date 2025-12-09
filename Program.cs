@@ -17,7 +17,8 @@ namespace ProyectoFinal
             Application.SetCompatibleTextRenderingDefault(false);
 
             // Formulario inicial del sistema
-            Application.Run(new frmLogin());   // Cambia frmLogin si quieres abrir otro form primero
+           // Application.Run(new frmLogin());   // Cambia frmLogin si quieres abrir otro form primero
+           Application.Run(new frmCatalogoVehiculos());
         }
     }
 }
