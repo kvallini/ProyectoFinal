@@ -181,6 +181,8 @@ namespace ProyectoFinal
                         txtTipo.Text = reader["Tipo_Vehiculo"].ToString();
                         txtEstado.Text = reader["Estado_Vehiculo"].ToString();
 
+
+
                         CargarEquipamientoEnDataGrid(reader);
                         CargarImagenes(reader);
                     }
@@ -259,20 +261,16 @@ namespace ProyectoFinal
         {
             try
             {
-                // 1. Verificar si hay nombre de archivo
+                // Verificar si hay nombre de archivo
                 if (string.IsNullOrWhiteSpace(nombreArchivo))
                 {
                     CrearPlaceholder(pictureBox);
                     return;
                 }
 
-                // 2. Construir ruta completa
-                // ASUNTO: Necesito saber la estructura de tus carpetas
-
                 string rutaBase = @"C:\C#2025\IIICUATRI\PROYECTO\FOTOSVEH\";
                 string rutaCompleta = Path.Combine(rutaBase, nombreArchivo);
 
-                // 3. Probar con extensiones comunes si no tiene
                 if (!File.Exists(rutaCompleta))
                 {
                     string[] extensiones = { "", ".jpg", ".jpeg", ".png", ".bmp", ".gif" };
@@ -288,7 +286,7 @@ namespace ProyectoFinal
                     }
                 }
 
-                // 4. Cargar imagen si existe
+                // Cargar imagen si existe
                 if (File.Exists(rutaCompleta))
                 {
                     // Liberar imagen anterior
@@ -302,20 +300,18 @@ namespace ProyectoFinal
                 }
                 else
                 {
-                    // Si no existe, mostrar placeholder
+                    // Si no existe, mostrar el placeholder
                     CrearPlaceholder(pictureBox);
 
-                    // DEBUG opcional: mostrar qué ruta buscó
-                    // MessageBox.Show($"No se encontró: {rutaCompleta}", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"No se encontró: {rutaCompleta}", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                // Si hay error, mostrar placeholder
+                // Si hay error, mostrar el placeholder
                 CrearPlaceholder(pictureBox);
 
-                // DEBUG: Mostrar error solo si es necesario
-                // MessageBox.Show($"Error cargando {nombreArchivo}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"Error cargando {nombreArchivo}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         private void CrearPlaceholder(PictureBox pictureBox)
@@ -325,11 +321,8 @@ namespace ProyectoFinal
             using (Graphics g = Graphics.FromImage(placeholder))
             {
                 g.Clear(Color.LightGray);
-
-                // Dibujar borde
                 g.DrawRectangle(Pens.DarkGray, 0, 0, placeholder.Width - 1, placeholder.Height - 1);
 
-                // Dibujar texto
                 StringFormat format = new StringFormat();
                 format.Alignment = StringAlignment.Center;
                 format.LineAlignment = StringAlignment.Center;
@@ -403,24 +396,37 @@ namespace ProyectoFinal
 
         private void btnVolver_Click(object sender, EventArgs e)
         {
-            this.Close();
+            frmClientes clientes = new frmClientes();
         }
 
         private void btnSeleccionar_Click(object sender, EventArgs e)
         {
-            if (cmbVehiculos.SelectedIndex <= 0)
+            try
             {
-                MessageBox.Show("Seleccione un vehículo primero");
-                return;
+                // 1. Validar selección
+                if (cmbVehiculos.SelectedIndex <= 0)
+                {
+                    MessageBox.Show("Seleccione un vehículo");
+                    return;
+                }
+
+                // 2. Obtener precio (solo números)
+                string textoPrecio = txtPrecio.Text;
+                textoPrecio = textoPrecio.Replace("$", "").Replace(",", "");
+
+                // 3. Crear y pasar datos
+                frmServicios formServicios = new frmServicios();
+                formServicios.Marca = txtMarca.Text;
+                formServicios.Modelo = txtModelo.Text;
+                formServicios.PrecioVehiculo = decimal.Parse(textoPrecio);
+
+                // 4. Mostrar
+                formServicios.Show();
             }
-
-            // Aquí guardas qué vehículo seleccionó
-            // Luego abres el siguiente formulario (servicios)
-            // frmServiciosAdicionales servicios = new frmServiciosAdicionales();
-            // servicios.Show();
-            // this.Hide();
-
-            MessageBox.Show("Vehículo seleccionado - Pendiente conectar con servicios");
+            catch
+            {
+                MessageBox.Show("Error al obtener precio");
+            }
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
