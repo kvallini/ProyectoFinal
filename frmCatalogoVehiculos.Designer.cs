@@ -1,4 +1,6 @@
-﻿namespace ProyectoFinal
+﻿using System;
+
+namespace ProyectoFinal
 {
     partial class frmCatalogoVehiculos
     {
@@ -546,6 +548,7 @@
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
             this.salirToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.salirToolStripMenuItem.Text = "Salir";
+            this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
             // 
             // clientesToolStripMenuItem
             // 
@@ -574,6 +577,7 @@
             this.verMisCitasToolStripMenuItem.Name = "verMisCitasToolStripMenuItem";
             this.verMisCitasToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.verMisCitasToolStripMenuItem.Text = "Ver mis Citas";
+            this.verMisCitasToolStripMenuItem.Click += new System.EventHandler(this.verMisCitasToolStripMenuItem_Click);
             // 
             // colaboradoresToolStripMenuItem
             // 
@@ -715,6 +719,11 @@
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

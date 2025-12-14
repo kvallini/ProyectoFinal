@@ -1,13 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Data;
+using System.Data.SqlClient;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ProyectoFinal.Clases
 {
     internal class ValidacionLogin : InfoLogin
     {
+        public int ID_Cliente { get; private set; }
+        public string NombreCompleto { get; private set; }
+        public string EmailReal { get; private set; }
+
         public ValidacionLogin(string usuario, string contrasena, string tipoAcceso)
         {
             _Usuario = usuario;
@@ -15,36 +18,88 @@ namespace ProyectoFinal.Clases
             _TipoAcceso = tipoAcceso;
         }
 
-        // Validación básica "quemada" para pruebas
+        // Método para codificar Base64
+        private string CodificarBase64(string texto)
+        {
+            byte[] datos = Encoding.UTF8.GetBytes(texto);
+            return Convert.ToBase64String(datos);
+        }
+
         public bool EsValido()
         {
-            // LOGIN DE CLIENTE
-            if (_Usuario == "cliente" && _Contrasena == "1111" && _TipoAcceso == "Cliente")
-                return true;
+            // Solo validar clientes
+            if (_TipoAcceso != "Cliente")
+            {
+                Console.WriteLine($" Acceso no Invalido: {_TipoAcceso}");
+                return false;
+            }
 
-            // LOGIN DE COLABORADORES
-            // Admin
-            if (_Usuario == "admin" && _Contrasena == "1234" && _TipoAcceso == "Administrador")
-                return true;
+            try
+            {
 
-            // Agente
-            if (_Usuario == "agente1" && _Contrasena == "2222" && _TipoAcceso == "Agente")
-                return true;
+                string contrasenaCodificada = CodificarBase64(_Contrasena);
+                Console.WriteLine($" Contraseña codificada: {contrasenaCodificada}");
 
-            // Recepcionista
-            if (_Usuario == "recep1" && _Contrasena == "3333" && _TipoAcceso == "Recepcionista")
-                return true;
+                string connectionString =
+                    @"Data Source=CAVALLINI\CURSOSQL2022;
+                      Initial Catalog=SISTEMA_VENTA_AUTOS_USADOS;
+                      User ID=sa;Password=12345678";
 
-            // Cajera
-            if (_Usuario == "cajera1" && _Contrasena == "4444" && _TipoAcceso == "Cajera")
-                return true;
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    string query = @"
+                        SELECT 
+                            U.ID_Usuario, 
+                            U.Email, 
+                            U.Password, 
+                            C.ID_Cliente, 
+                            C.Nombre, 
+                            C.Primer_Apellido
+                        FROM USUARIOS U
+                        INNER JOIN CLIENTES C ON U.ID_Usuario = C.ID_Usuario
+                        WHERE U.Email = @email 
+                        AND U.Password = @password
+                        AND U.Estado = 1
+                        AND C.Estado = 1";
 
-            return false;
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@email", _Usuario);
+                    cmd.Parameters.AddWithValue("@password", contrasenaCodificada);
+
+                    conn.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        ID_Cliente = reader.GetInt32(reader.GetOrdinal("ID_Cliente"));
+                        NombreCompleto = $"{reader["Nombre"]} {reader["Primer_Apellido"]}";
+                        EmailReal = reader["Email"].ToString();
+
+                        Console.WriteLine($" Login exitoso: {NombreCompleto} (ID: {ID_Cliente})");
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine($" No se encontró usuario en BD: {_Usuario}");
+                        return false;
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                Console.WriteLine($" ERROR SQL: {sqlEx.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($" ERROR: {ex.Message}");
+                return false;
+            }
         }
 
         public string MensajeBienvenida()
         {
-            return "Bienvenido " + this.usuario + " (" + this.tipoAcceso + ")";
+            return $"Bienvenido {NombreCompleto}";
         }
     }
 }

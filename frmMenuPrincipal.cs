@@ -26,5 +26,10 @@ namespace ProyectoFinal
         {
 
         }
+
+        private void catalogoDeVehiculosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmClientes clientesForm = new frmClientes();
+        }
     }
 }

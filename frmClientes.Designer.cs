@@ -122,12 +122,14 @@
             this.catalogoDeVehiculosToolStripMenuItem.Name = "catalogoDeVehiculosToolStripMenuItem";
             this.catalogoDeVehiculosToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.catalogoDeVehiculosToolStripMenuItem.Text = "Catalogo de Vehiculos";
+            this.catalogoDeVehiculosToolStripMenuItem.Click += new System.EventHandler(this.catalogoDeVehiculosToolStripMenuItem_Click);
             // 
             // serviciosAdicionalesToolStripMenuItem
             // 
             this.serviciosAdicionalesToolStripMenuItem.Name = "serviciosAdicionalesToolStripMenuItem";
             this.serviciosAdicionalesToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.serviciosAdicionalesToolStripMenuItem.Text = "Servicios Adicionales";
+            this.serviciosAdicionalesToolStripMenuItem.Click += new System.EventHandler(this.serviciosAdicionalesToolStripMenuItem_Click);
             // 
             // verMisCitasToolStripMenuItem
             // 
@@ -229,6 +231,7 @@
             this.btnCerrarSesion.TabIndex = 3;
             this.btnCerrarSesion.Text = "Cerrar Sesión";
             this.btnCerrarSesion.UseVisualStyleBackColor = true;
+            this.btnCerrarSesion.Click += new System.EventHandler(this.btnCerrarSesion_Click);
             // 
             // btnMisCitas
             // 
@@ -242,6 +245,7 @@
             this.btnMisCitas.TabIndex = 2;
             this.btnMisCitas.Text = "Mis Citas";
             this.btnMisCitas.UseVisualStyleBackColor = false;
+            this.btnMisCitas.Click += new System.EventHandler(this.btnMisCitas_Click);
             // 
             // btnServiciosAdicionales
             // 
@@ -255,6 +259,7 @@
             this.btnServiciosAdicionales.TabIndex = 1;
             this.btnServiciosAdicionales.Text = "Servicios Adicionales";
             this.btnServiciosAdicionales.UseVisualStyleBackColor = false;
+            this.btnServiciosAdicionales.Click += new System.EventHandler(this.btnServiciosAdicionales_Click);
             // 
             // btnCatalogo
             // 
@@ -268,6 +273,7 @@
             this.btnCatalogo.TabIndex = 0;
             this.btnCatalogo.Text = "Catálogo de Vehículos";
             this.btnCatalogo.UseVisualStyleBackColor = false;
+            this.btnCatalogo.Click += new System.EventHandler(this.btnCatalogo_Click_1);
             // 
             // frmClientes
             // 

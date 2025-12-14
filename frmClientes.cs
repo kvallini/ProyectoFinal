@@ -45,6 +45,41 @@ namespace ProyectoFinal
         {
             frmCatalogoVehiculos catalogo = new frmCatalogoVehiculos();
             catalogo.Show();
+            this.Hide();
+        }
+
+        private void catalogoDeVehiculosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmCatalogoVehiculos catalogo = new frmCatalogoVehiculos();
+            catalogo.Show();
+        }
+
+        private void btnCatalogo_Click_1(object sender, EventArgs e)
+        {
+            frmCatalogoVehiculos catalogo = new frmCatalogoVehiculos();
+            catalogo.Show();
+        }
+
+        private void serviciosAdicionalesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmServicios servicios = new frmServicios();
+            servicios.Show();
+        }
+
+        private void btnServiciosAdicionales_Click(object sender, EventArgs e)
+        {
+            frmServicios servicios = new frmServicios();
+            servicios.Show();
+        }
+
+        private void btnCerrarSesion_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnMisCitas_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

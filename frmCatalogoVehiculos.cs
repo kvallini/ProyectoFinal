@@ -210,32 +210,30 @@ namespace ProyectoFinal
         private void CargarEquipamientoEnDataGrid(SqlDataReader reader)
         {
             // Limpiar el DataGridView
-            dgvEquipamiento.Rows.Clear();
+            dgvEquipamiento.Rows.Clear(); 
 
-            // AGREGAR 4 FILAS:
-
-            // Fila 1: Equipamiento Básico
+            //  Equipamiento Básico
             string basico = reader["Equipamiento_Basico"].ToString();
             if (!string.IsNullOrEmpty(basico) && basico.Trim().Length > 0)
             {
                 dgvEquipamiento.Rows.Add("Equipamiento Básico", basico);
             }
 
-            // Fila 2: Equipamiento Confort
+            // Equipamiento Confort
             string confort = reader["Equipamiento_Confort"].ToString();
             if (!string.IsNullOrEmpty(confort) && confort.Trim().Length > 0)
             {
                 dgvEquipamiento.Rows.Add("Equipamiento Confort", confort);
             }
 
-            // Fila 3: Equipamiento Seguridad
+            //  Equipamiento Seguridad
             string seguridad = reader["Equipamiento_Seguridad"].ToString();
             if (!string.IsNullOrEmpty(seguridad) && seguridad.Trim().Length > 0)
             {
                 dgvEquipamiento.Rows.Add("Equipamiento Seguridad", seguridad);
             }
 
-            // Fila 4: Descripción General
+            //  Descripción General
             string descripcion = reader["Descripcion"].ToString();
             if (!string.IsNullOrEmpty(descripcion) && descripcion.Trim().Length > 0)
             {
@@ -398,7 +396,6 @@ namespace ProyectoFinal
         {
             frmClientes clientes = new frmClientes();
         }
-
         private void btnSeleccionar_Click(object sender, EventArgs e)
         {
             try
@@ -410,28 +407,58 @@ namespace ProyectoFinal
                     return;
                 }
 
-                // 2. Obtener precio (solo números)
+                // 2. Validar sesión de cliente
+                if (Sesion.ID_Cliente == 0)
+                {
+                    MessageBox.Show("Debe iniciar sesión como cliente primero.",
+                                   "Sesión requerida",
+                                   MessageBoxButtons.OK,
+                                   MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // 3. Obtener ID del vehículo seleccionado
+                dynamic selectedItem = cmbVehiculos.SelectedItem;
+                int idVehiculo = selectedItem.Value; // ← ESTE ES EL ID IMPORTANTE
+
+                // DEBUG: Verificar
+                MessageBox.Show($"DEBUG: ID_Vehiculo seleccionado = {idVehiculo}\n" +
+                               $"Debe ser 2, 3 o 4 según tu BD",
+                               "Verificación",
+                               MessageBoxButtons.OK,
+                               MessageBoxIcon.Information);
+
+                // 4. Obtener precio (solo números)
                 string textoPrecio = txtPrecio.Text;
                 textoPrecio = textoPrecio.Replace("$", "").Replace(",", "");
+                decimal precio = decimal.Parse(textoPrecio);
 
-                // 3. Crear y pasar datos
+                // 5. Crear y pasar datos COMPLETOS
                 frmServicios formServicios = new frmServicios();
                 formServicios.Marca = txtMarca.Text;
                 formServicios.Modelo = txtModelo.Text;
-                formServicios.PrecioVehiculo = decimal.Parse(textoPrecio);
+                formServicios.PrecioVehiculo = precio;
+                formServicios.IdVehiculo = idVehiculo; // ← ESTE FALTABA
+                formServicios.IdCliente = Sesion.ID_Cliente; // ← ESTE FALTABA
 
-                // 4. Mostrar
+                // 6. Mostrar
                 formServicios.Show();
+                this.Hide(); // Ocultar catálogo
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Error al obtener precio");
+                MessageBox.Show($"Error: {ex.Message}");
             }
         }
 
-        private void btnCancelar_Click(object sender, EventArgs e)
+        private void salirToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Application.Exit();
+        }
+
+        private void verMisCitasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

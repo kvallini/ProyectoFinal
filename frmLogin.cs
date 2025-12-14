@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Collections.Specialized.BitVector32;
 
 namespace ProyectoFinal
 {
@@ -24,7 +25,6 @@ namespace ProyectoFinal
             {
                 string usuario = txtUsuario.Text.Trim();
                 string contrasena = txtContrasena.Text.Trim();
-
                 string tipoAcceso = "Cliente";
 
                 InfoLogin info = new InfoLogin(usuario, contrasena, tipoAcceso);
@@ -37,31 +37,34 @@ namespace ProyectoFinal
 
                 if (valida.EsValido())
                 {
+                    Sesion.ID_Cliente = valida.ID_Cliente;
+                    Sesion.Nombre = valida.NombreCompleto;
+                    Sesion.Email = valida.EmailReal;
+                    Sesion.TipoUsuario = "Cliente";
+
                     MessageBox.Show(valida.MensajeBienvenida(),
-                                    "Acceso correcto",
+                                    " Acceso correcto",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Information);
 
-                    frmMenuPrincipal frm = new frmMenuPrincipal();
-                    frm.Show();
+                    frmClientes clienteForm = new frmClientes();
+                    clienteForm.Show();
                     this.Hide();
                 }
                 else
                 {
-                    MessageBox.Show("Usuario o contraseña incorrectos.",
-                                    "Acceso denegado",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error);
+                    MessageBox.Show("❌ Usuario o contraseña incorrectos.\n\n" +
+                                  "Use: cliente@prueba.com / cliente1",
+                                  "Acceso denegado",
+                                  MessageBoxButtons.OK,
+                                  MessageBoxIcon.Error);
                     txtContrasena.Clear();
                     txtUsuario.Focus();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ocurrió un error: " + ex.Message,
-                                "Error",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
+                MessageBox.Show("Error: " + ex.Message);
             }
         }
 

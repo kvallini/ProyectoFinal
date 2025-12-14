@@ -11,9 +11,7 @@ namespace ProyectoFinal
         public string Modelo { get; set; }
         public decimal PrecioVehiculo { get; set; }
         public int IdVehiculo { get; set; }
-
-        // ID Cliente (TEMPORAL - luego viene del login)
-        private int IdCliente = 1;
+        public int IdCliente = 1;
 
         // Variables internas
         private decimal cuotaMensualBanco = 0;
@@ -28,20 +26,16 @@ namespace ProyectoFinal
         {
             try
             {
-                // 1. Mostrar datos del vehículo
                 lblVehiculo.Text = $"{Marca} {Modelo}";
                 lblPrecio.Text = $"${PrecioVehiculo:N2}";
 
-                // 2. Cargar bancos desde la BD
                 CargarInstitucionesFinancieras();
 
-                // 3. Conectar eventos
                 cmbBancos.SelectedIndexChanged += CmbBancos_SelectedIndexChanged;
                 chkSeguro.CheckedChanged += (s, ev) => CalcularCuotaTotal();
                 btnAceptar.Click += BtnAceptar_Click;
                 btnCancelar.Click += (s, ev) => this.Close();
 
-                // 4. Calcular cuota inicial
                 CalcularCuotaTotal();
             }
             catch (Exception ex)
@@ -118,58 +112,47 @@ namespace ProyectoFinal
 
         private void BtnAceptar_Click(object sender, EventArgs e)
         {
-            // Validar selección de banco
             if (cmbBancos.SelectedIndex < 0)
             {
-                MessageBox.Show("Por favor seleccione una institución financiera.",
-                              "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Seleccione un banco");
                 return;
             }
 
-            // Calcular prima del 20%
+            // CALCULAR TODO
             decimal prima = PrecioVehiculo * 0.20m;
+            decimal cuotaMensual = (PrecioVehiculo - prima) / 60 * 1.1m;
 
-            // Mostrar confirmación con todos los detalles
-            string mensajeConfirmacion =
-                $"¿CONFIRMAR PROCESO DE COMPRA?\n\n" +
-                $" RESUMEN DE COMPRA:\n" +
-                $"────────────────────\n" +
-                $"• Vehículo: {Marca} {Modelo}\n" +
-                $"• Precio: ${PrecioVehiculo:N2}\n" +
-                $"• Prima (20%): ${prima:N2}\n" +
-                $"• Financiamiento: {bancoSeleccionado}\n" +
-                $"• Cuota mensual: {lblTotal.Text}\n" +
-                $"• Seguro: {(chkSeguro.Checked ? "SÍ (+$28/mes)" : "NO")}\n\n" +
-                $" PROCESO AUTOMÁTICO:\n" +
-                $"────────────────────\n" +
-                $"1. Reserva inmediata del vehículo\n" +
-                $"2. Cita automática: Mañana 10:00 AM\n" +
-                $"3. Registro de prima del 20%\n\n" +
-                $"¿Desea continuar?";
+            if (chkSeguro.Checked)
+                cuotaMensual += 28;
 
-            DialogResult respuesta = MessageBox.Show(
-                mensajeConfirmacion,
-                "Confirmar Proceso Completo",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
+            // MOSTRAR RESUMEN
+            string resumen =
+                $" RESUMEN DE COMPRA\n\n" +
+                $"Vehículo: {Marca} {Modelo}\n" +
+                $"Precio: ${PrecioVehiculo:N2}\n" +
+                $"Prima (20%): ${prima:N2}\n" +
+                $"Financiamiento: {cmbBancos.SelectedItem}\n" +
+                $"Seguro: {(chkSeguro.Checked ? "Sí (+$28/mes)" : "No")}\n" +
+                $"Cuota mensual: ${cuotaMensual:N2}\n\n" +
+                $" Se solicitará:\n" +
+                $"• Reserva del vehículo\n" +
+                $"• Cita para mañana\n" +
+                $"• Recepcionista asignará agente\n\n" +
+                $"¿Confirmar?";
+
+            DialogResult respuesta = MessageBox.Show(resumen,
+                                                   "Confirmar Compra y Solicitar Cita",
+                                                   MessageBoxButtons.YesNo,
+                                                   MessageBoxIcon.Question);
 
             if (respuesta == DialogResult.Yes)
             {
-                // Ejecutar todo el proceso
                 if (ProcesarCompraCompleta())
                 {
-                    MessageBox.Show(
-                        " ¡PROCESO COMPLETADO EXITOSAMENTE!\n\n" +
-                        " Vehículo reservado\n" +
-                        " Cita solicitada para mañana 10:00 AM\n" +
-                        " Prima del 20% registrada\n" +
-                        " Recepcionista contactará para confirmar cita\n\n" +
-                        " Será contactado próximamente para detalles finales",
-                        "Éxito",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
-                    // Cerrar formulario
+                    MessageBox.Show(" Proceso completado.\nVehículo reservado.\nCita solicitada.",
+                                   "Éxito",
+                                   MessageBoxButtons.OK,
+                                   MessageBoxIcon.Information);
                     this.Close();
                 }
             }
@@ -177,6 +160,7 @@ namespace ProyectoFinal
 
         private bool ProcesarCompraCompleta()
         {
+            SqlTransaction transaction = null;
             try
             {
                 string connStr = @"Data Source=CAVALLINI\CURSOSQL2022;Initial Catalog=SISTEMA_VENTA_AUTOS_USADOS;User ID=sa;Password=12345678";
@@ -184,53 +168,114 @@ namespace ProyectoFinal
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
                     conn.Open();
+                    transaction = conn.BeginTransaction();
 
-                    // 1. RESERVAR VEHÍCULO
-                    SqlCommand cmdReserva = new SqlCommand(
-                        "UPDATE VEHICULOS SET Estado_Vehiculo = 'Reservado' WHERE ID_Vehiculo = @idVehiculo",
-                        conn);
-                    cmdReserva.Parameters.AddWithValue("@idVehiculo", IdVehiculo);
-                    cmdReserva.ExecuteNonQuery();
+                    // VERIFICAR CLIENTE EXISTE
+                    string sqlCheckCliente = "SELECT COUNT(*) FROM CLIENTES WHERE ID_Cliente = @cliente";
+                    using (SqlCommand cmdCheck = new SqlCommand(sqlCheckCliente, conn, transaction))
+                    {
+                        cmdCheck.Parameters.AddWithValue("@cliente", IdCliente);
+                        if ((int)cmdCheck.ExecuteScalar() == 0)
+                        {
+                            transaction.Rollback();
+                            MessageBox.Show($"Cliente no encontrado en el sistema",
+                                          "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+                    }
 
-                    // 2. CALCULAR PRIMA (20%)
-                    decimal prima = PrecioVehiculo * 0.20m;
+                    //  VERIFICAR VEHÍCULO DISPONIBLE
+                    string sqlCheckVehiculo = "SELECT Estado_Vehiculo FROM VEHICULOS WHERE ID_Vehiculo = @vehiculo";
+                    using (SqlCommand cmdCheck = new SqlCommand(sqlCheckVehiculo, conn, transaction))
+                    {
+                        cmdCheck.Parameters.AddWithValue("@vehiculo", IdVehiculo);
+                        object resultado = cmdCheck.ExecuteScalar();
 
-                    // 3. CREAR RESERVA
-                    SqlCommand cmdInsertReserva = new SqlCommand(
-                        @"INSERT INTO RESERVAS 
-                  (ID_Cliente, ID_Vehiculo, Fecha_Reserva, Fecha_Vencimiento, Estado_Reserva, Deposito)
-                  VALUES 
-                  (@idCliente, @idVehiculo, GETDATE(), DATEADD(DAY, 7, GETDATE()), 'Activa', @deposito)",
-                        conn);
-                    cmdInsertReserva.Parameters.AddWithValue("@idCliente", IdCliente);
-                    cmdInsertReserva.Parameters.AddWithValue("@idVehiculo", IdVehiculo);
-                    cmdInsertReserva.Parameters.AddWithValue("@deposito", prima);
-                    cmdInsertReserva.ExecuteNonQuery();
+                        if (resultado == null)
+                        {
+                            transaction.Rollback();
+                            MessageBox.Show($"Vehículo no encontrado",
+                                          "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
 
-                    // 4. SOLICITAR CITA (SIN AGENTE ASIGNADO - NULL)
-                    DateTime fechaCitaSolicitada = DateTime.Today.AddDays(1).AddHours(10);
+                        string estado = resultado.ToString();
+                        if (estado != "Disponible")
+                        {
+                            transaction.Rollback();
+                            MessageBox.Show($"Vehículo no disponible. Estado actual: {estado}",
+                                          "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+                    }
 
-                    SqlCommand cmdInsertCita = new SqlCommand(
-                        @"INSERT INTO CITAS 
-                  (ID_Cliente, ID_Agente, ID_Vehiculo, Fecha_Cita, Tipo_Cita, Estado_Cita, Motivo, Fecha_Creacion)
-                  VALUES 
-                  (@idCliente, NULL, @idVehiculo, @fechaCita, 'Venta', 'Solicitada', 
-                  'Cliente solicita cita para revisión de documentación y firma de contrato. Prima del 20% registrada.', GETDATE())",
-                        conn);
-                    cmdInsertCita.Parameters.AddWithValue("@idCliente", IdCliente);
-                    cmdInsertCita.Parameters.AddWithValue("@idVehiculo", IdVehiculo);
-                    cmdInsertCita.Parameters.AddWithValue("@fechaCita", fechaCitaSolicitada);
-                    cmdInsertCita.ExecuteNonQuery();
+                    // RESERVAR VEHÍCULO
+                    string sqlReserva = "UPDATE VEHICULOS SET Estado_Vehiculo = 'Reservado' WHERE ID_Vehiculo = @id";
+                    using (SqlCommand cmdReserva = new SqlCommand(sqlReserva, conn, transaction))
+                    {
+                        cmdReserva.Parameters.AddWithValue("@id", IdVehiculo);
+                        cmdReserva.ExecuteNonQuery();
+                    }
+
+                    //  INSERTAR CITA
+                    string sqlCita = @"
+                INSERT INTO CITAS 
+                (ID_Cliente, ID_Agente, ID_Vehiculo, Fecha_Cita, Tipo_Cita, Estado_Cita, Motivo, Fecha_Creacion) 
+                VALUES 
+                (@cliente, 
+                 NULL,
+                 @vehiculo, 
+                 DATEADD(DAY, 1, GETDATE()),
+                 'Negociación',
+                 'Pendiente',
+                 'Solicitud de cita para negociación de compra',
+                 GETDATE())";
+
+                    using (SqlCommand cmdCita = new SqlCommand(sqlCita, conn, transaction))
+                    {
+                        cmdCita.Parameters.AddWithValue("@cliente", IdCliente);
+                        cmdCita.Parameters.AddWithValue("@vehiculo", IdVehiculo);
+                        cmdCita.ExecuteNonQuery();
+                    }
+
+                    // CONFIRMAR TRANSACCIÓN
+                    transaction.Commit();
+
+                    MessageBox.Show(" Solicitud procesada exitosamente\n\n" +
+                                  "• Vehículo reservado\n" +
+                                  "• Cita creada (Estado: Pendiente)\n" +
+                                  "• La recepcionista contactará para confirmar fecha y hora",
+                                  "Solicitud Completada",
+                                  MessageBoxButtons.OK,
+                                  MessageBoxIcon.Information);
 
                     return true;
                 }
             }
+            catch (SqlException sqlEx)
+            {
+                transaction?.Rollback();
+
+                if (sqlEx.Message.Contains("CHECK constraint"))
+                {
+                    MessageBox.Show("Error en datos de la cita. Contacte al administrador.",
+                                  "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show($"Error de base de datos: {sqlEx.Message}",
+                                  "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                return false;
+            }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}");
+                transaction?.Rollback();
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
-    
+
+
     }
 }
