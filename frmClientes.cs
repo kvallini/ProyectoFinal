@@ -40,5 +40,11 @@ namespace ProyectoFinal
         {
             Application.Exit();
         }
+
+        private void btnCatalogo_Click(object sender, EventArgs e)
+        {
+            frmCatalogoVehiculos catalogo = new frmCatalogoVehiculos();
+            catalogo.Show();
+        }
     }
 }
